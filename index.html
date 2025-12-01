@@ -508,63 +508,32 @@ eu não sei do futuro. ninguém sabe. mas, por agora, por hoje, por esse momento
     // close modal on bg click
     modal.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
 
-    /* ---------- surprise buttons ---------- */
+   // botão "não" que foge mas não some
+if (btnNao) {
+  btnNao.style.position = "relative";
+
+  function moveNao() {
+    // ele vai fugir só alguns pixels, sem sumir
+    const x = (Math.random() * 120) - 60; // entre -60 e +60
+    const y = (Math.random() * 80) - 40;  // entre -40 e +40
+
+    btnNao.style.transform = `translate(${x}px, ${y}px)`;
+  }
+
+  btnNao.addEventListener("mouseenter", moveNao);
+  btnNao.addEventListener("click", (e) => {
+    e.preventDefault();
+    moveNao();
+  });
+}
+    // botão "sim" que mostra mensagem de amor
     const btnSim = document.getElementById('btnSim');
-    const btnNao = document.getElementById('btnNao');
     const fullLove = document.getElementById('fullLove');
-
-    btnSim && btnSim.addEventListener('click', ()=> {
-      fullLove.classList.add('show');
-      fullLove.scrollIntoView({behavior:'smooth', block:'center'});
-    });
-
-    // playful evasive "Não" button but constrained to viewport
-    if(btnNao){
-      btnNao.style.position = 'absolute';
-      const parent = btnNao.closest('.buttons') || document.body;
-      parent.style.position = parent.style.position || 'relative';
-
-      function moveNao(){
-        const pad = 8; // keep some padding
-        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-        const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-        const rect = parent.getBoundingClientRect();
-        const maxX = Math.max(0, rect.width - btnNao.offsetWidth - pad);
-        const maxY = Math.max(0, rect.height - btnNao.offsetHeight - pad);
-
-        const x = Math.random()*maxX;
-        const y = Math.random()*maxY;
-        btnNao.style.transform = `translate(${x}px, ${y}px)`;
-      }
-
-      // move on hover or focus
-      btnNao.addEventListener('mouseenter', moveNao);
-      btnNao.addEventListener('focus', moveNao);
-      // also move a bit on click (mobile)
-      btnNao.addEventListener('click', (e)=>{ e.preventDefault(); moveNao(); });
+    if(btnSim){
+      btnSim.addEventListener('click', ()=>{
+        fullLove.classList.add('show');
+        // scroll to bottom to see message
+        fullLove.scrollIntoView({behavior:'smooth'});
+      });
     }
-
-    /* close mobile menu on resize to desktop */
-    window.addEventListener('resize', ()=>{
-      if(window.innerWidth > 720){
-        if(mobileMenu.style.display === 'block') {
-          mobileMenu.style.display = 'none';
-          hamb.classList.remove('open');
-          document.body.style.overflow = '';
-        }
-      }
-    });
-
-    /* small enhancement: close mobile menu when link clicked (helper) */
-    function closeMobileMenu(){ if(hamb.classList.contains('open')) toggleMobileMenu(); }
-
-    // keyboard escape to close modal or mobile menu
-    window.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape'){
-        closeModal();
-        if(hamb.classList.contains('open')) toggleMobileMenu();
-      }
-    });
   </script>
-</body>
-</html>
